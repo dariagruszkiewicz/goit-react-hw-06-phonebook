@@ -1,27 +1,24 @@
+import { useDispatch, useSelector } from 'react-redux';
 import css from './ContactForm.module.css';
-import { useState } from 'react';
+import { addContact } from 'redux/actions';
 
-export const ContactForm = ({ onSubmit }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
-
-  const handleInputChange = e => {
-    const value = e.target.value;
-    setName(value);
-  };
-
-  const handleInputNumberChange = e => {
-    const nr = e.target.value;
-    setNumber(nr);
-  };
+export const ContactForm = () => {
+  const contacts = useSelector(state => state.contacts);
+  const dispatch = useDispatch();
 
   const handleSubmit = e => {
     e.preventDefault();
-    onSubmit(name, number);
+    const form = e.target;
+    const contact = form.elements.text.value;
+    const number = form.elements.tel.value;
+    const name = contacts.map(item => item.contact);
+    if (name.includes(contact)) {
+      alert(`${contact} is alredy in contacts.`);
+    } else {
+      dispatch(addContact(contact, number));
+    }
 
-    // reset danych
-    setName('');
-    setNumber('');
+    form.reset();
   };
 
   return (
@@ -30,24 +27,20 @@ export const ContactForm = ({ onSubmit }) => {
         Name
         <input
           type="text"
-          name="name"
+          name="text"
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
-          value={name}
-          onChange={handleInputChange}
         />
       </label>
       <label>
         Number
         <input
           type="tel"
-          name="number"
+          name="tel"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
-          value={number}
-          onChange={handleInputNumberChange}
         />
       </label>
       <button type="submit">Add contact</button>
