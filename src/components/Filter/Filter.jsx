@@ -6,7 +6,6 @@ export const Filter = () => {
 
   const inputFilterChange = e => {
     dispatch(filterContact(e.target.value));
-    console.log(dispatch(filterContact(e.target.value)));
   };
 
   return (
