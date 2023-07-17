@@ -1,6 +1,5 @@
-import { combineReducers } from 'redux';
-
-// import { statusFilters } from './constans';
+import { createReducer } from '@reduxjs/toolkit';
+import { addContact, deleteContact, filterContact } from './actions';
 
 const contactsInitialState = [
   { id: 'id-1', contact: 'Rosie Simpson', number: '459-12-56' },
@@ -9,24 +8,16 @@ const contactsInitialState = [
   { id: 'id-4', contact: 'Annie Copeland', number: '227-91-26' },
 ];
 
-const contactsReducer = (state = contactsInitialState, action) => {
-  switch (action.type) {
-    case 'contacts/addContact':
-      return [...state, action.payload];
-
-    case 'contacts/deleteContact':
-      return state.filter(item => item.id !== action.payload);
-
-    case 'filter/setFilter':
-      return state.filter(item =>
-        item.contact.toLowerCase().includes(action.payload.toLowerCase())
-      );
-
-    default:
-      return state;
-  }
-};
-
-export const rootReducer = combineReducers({
-  contacts: contactsReducer,
+export const contactsReducer = createReducer(contactsInitialState, {
+  [addContact]: (state, action) => {
+    state.push(action.payload);
+  },
+  [deleteContact]: (state, action) => {
+    return state.filter(item => item.id !== action.payload);
+  },
+  [filterContact]: (state, action) => {
+    return state.filter(item =>
+      item.contact.toLowerCase().includes(action.payload.toLowerCase())
+    );
+  },
 });
