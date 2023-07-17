@@ -1,12 +1,12 @@
 import { useDispatch } from 'react-redux';
-import { filterContact } from 'redux/actions';
+import { filterContact } from 'redux/sliceFilter';
 
 export const Filter = () => {
   const dispatch = useDispatch();
 
   const inputFilterChange = e => {
-    const value = e.target.value;
-    dispatch(filterContact(value));
+    dispatch(filterContact(e.target.value));
+    console.log(dispatch(filterContact(e.target.value)));
   };
 
   return (
